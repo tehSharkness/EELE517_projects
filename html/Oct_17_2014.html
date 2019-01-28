@@ -1,0 +1,203 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Oct_17_2014</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-10-21"><meta name="DC.source" content="Oct_17_2014.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% Author: Sam Harkness</span>
+<span class="comment">% Date: 17 Oct 2014</span>
+<span class="comment">% Class: EELE 517</span>
+
+close <span class="string">all</span>
+clear <span class="string">all</span>
+
+n = 1000;   <span class="comment">%number of points</span>
+
+c = 343;    <span class="comment">%speed of sound (in air)</span>
+<span class="comment">% rho_c = 415;    %characteristic impedance (of air)</span>
+Pref = 20e-6;   <span class="comment">%reference pressure</span>
+
+f = 5e3;    <span class="comment">%frequency</span>
+w = 2*pi*f; <span class="comment">%radian frequency</span>
+k = w/c;    <span class="comment">%wave number</span>
+
+a12 = 12e-2;    <span class="comment">%radius of 12cm driver</span>
+a1 = 1e-2;  <span class="comment">%radius of 1cm driver</span>
+
+h = 20e-2;  <span class="comment">%vertical distance between center of two drivers</span>
+
+r12 = 2;    <span class="comment">%distance to sweeping line from 12cm driver</span>
+r1 = sqrt(h^2 + 2^2);    <span class="comment">%distance to sweeping line from 1cm driver</span>
+
+SPL12 = 100;
+SPL1 = 100;
+
+P12 = Pref * 10^(SPL12/20) * sqrt(2); <span class="comment">%Pressure amplitude for the 12cm driver at theta12 = 0, r12</span>
+P1 = Pref * 10^(SPL1/20) * sqrt(2);  <span class="comment">%Pressure amplitude for the 1cm driver at theta1 = 5.7deg, r1</span>
+
+theta = linspace(-pi/2, pi/2, n);
+theta12 = theta;
+<span class="comment">%theta1 = [linspace(-pi/2, -5.7*pi/180, 50), linspace(5.7*pi/180, pi/2,50)];    %array of linearly space elements between the minimum and maximum values of theta1</span>
+
+l = sqrt(2^2 + r12^2 - 2*2*r12*cos(theta)); <span class="comment">%use law of cosines to find distance between point X and the sweeping line at 2m from the 20 cm driver</span>
+m = sqrt(l.^2 + h^2);    <span class="comment">%distance between the sweeping line 20cm above point X</span>
+clear <span class="string">l</span>;
+
+theta1 = acos((m.^2-2^2-r1^2)./(2*2*r1)); <span class="comment">%use law of cosines to find angle between the 1cm driver and the sweeping line</span>
+clear <span class="string">m</span>;
+
+<span class="comment">% U12 = P12 * 2/rho_c * r12./a12 * 1/(k*a12);</span>
+<span class="comment">% U1 = P1 * 2/rho_c * r1./a1 * 1/(k*a1);</span>
+
+<span class="comment">% p12_solo = 1i * rho_c/2 * U12 .* a12./r12 * k*a12 .* exp(1i*(-k*r12)) .* (2*besselj(1,k*a12*sin(theta12))./(k*a12*sin(theta12)));</span>
+<span class="comment">% p1_solo = 1i * rho_c/2 * U1 .* a1./r1 * k*a1 .* exp(1i*(-k*r1)) .* (2*besselj(1,k*a1*sin(theta1))./(k*a1*sin(theta1)));</span>
+
+p12_solo = 1i * P12 .* exp(1i*(-k*r12)) .* (2*besselj(1,k*a12*sin(theta12))./(k*a12*sin(theta12)));
+p1_solo = 1i * P1 .* exp(1i*(-k*r1)) .* (2*besselj(1,k*a1*sin(theta1))./(k*a1*sin(theta1)));
+
+
+figure(1)
+subplot(2,1,1),plot(theta./pi,abs(p12_solo)),title(<span class="string">'|\bf{p}\rm_{12}|'</span>),xlabel(<span class="string">'x\pi radians'</span>)
+subplot(2,1,2),polar(theta,abs(p12_solo))
+
+figure(2)
+subplot(2,1,1),plot(theta./pi,abs(p1_solo)),title(<span class="string">'|\bf{p}\rm_1|'</span>),xlabel(<span class="string">'x\pi radians'</span>)
+subplot(2,1,2),polar(theta,abs(p1_solo))
+
+p_tot = p12_solo + p1_solo;
+
+figure(3)
+subplot(2,1,1),plot(theta./pi,abs(p_tot)),title(<span class="string">'|\bf{p}|'</span>),xlabel(<span class="string">'x\pi radians'</span>)
+subplot(2,1,2),polar(theta,abs(p_tot))
+</pre><img vspace="5" hspace="5" src="Oct_17_2014_01.png" alt=""> <img vspace="5" hspace="5" src="Oct_17_2014_02.png" alt=""> <img vspace="5" hspace="5" src="Oct_17_2014_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Author: Sam Harkness
+% Date: 17 Oct 2014
+% Class: EELE 517
+
+close all
+clear all
+
+n = 1000;   %number of points
+
+c = 343;    %speed of sound (in air)
+% rho_c = 415;    %characteristic impedance (of air)
+Pref = 20e-6;   %reference pressure
+
+f = 5e3;    %frequency
+w = 2*pi*f; %radian frequency
+k = w/c;    %wave number
+
+a12 = 12e-2;    %radius of 12cm driver
+a1 = 1e-2;  %radius of 1cm driver
+
+h = 20e-2;  %vertical distance between center of two drivers
+
+r12 = 2;    %distance to sweeping line from 12cm driver
+r1 = sqrt(h^2 + 2^2);    %distance to sweeping line from 1cm driver
+
+SPL12 = 100;
+SPL1 = 100;
+
+P12 = Pref * 10^(SPL12/20) * sqrt(2); %Pressure amplitude for the 12cm driver at theta12 = 0, r12
+P1 = Pref * 10^(SPL1/20) * sqrt(2);  %Pressure amplitude for the 1cm driver at theta1 = 5.7deg, r1 
+
+theta = linspace(-pi/2, pi/2, n);
+theta12 = theta;
+%theta1 = [linspace(-pi/2, -5.7*pi/180, 50), linspace(5.7*pi/180, pi/2,50)];    %array of linearly space elements between the minimum and maximum values of theta1
+
+l = sqrt(2^2 + r12^2 - 2*2*r12*cos(theta)); %use law of cosines to find distance between point X and the sweeping line at 2m from the 20 cm driver
+m = sqrt(l.^2 + h^2);    %distance between the sweeping line 20cm above point X
+clear l;
+
+theta1 = acos((m.^2-2^2-r1^2)./(2*2*r1)); %use law of cosines to find angle between the 1cm driver and the sweeping line
+clear m;
+
+% U12 = P12 * 2/rho_c * r12./a12 * 1/(k*a12);
+% U1 = P1 * 2/rho_c * r1./a1 * 1/(k*a1);
+
+% p12_solo = 1i * rho_c/2 * U12 .* a12./r12 * k*a12 .* exp(1i*(-k*r12)) .* (2*besselj(1,k*a12*sin(theta12))./(k*a12*sin(theta12)));
+% p1_solo = 1i * rho_c/2 * U1 .* a1./r1 * k*a1 .* exp(1i*(-k*r1)) .* (2*besselj(1,k*a1*sin(theta1))./(k*a1*sin(theta1)));
+
+p12_solo = 1i * P12 .* exp(1i*(-k*r12)) .* (2*besselj(1,k*a12*sin(theta12))./(k*a12*sin(theta12)));
+p1_solo = 1i * P1 .* exp(1i*(-k*r1)) .* (2*besselj(1,k*a1*sin(theta1))./(k*a1*sin(theta1)));
+
+
+figure(1)
+subplot(2,1,1),plot(theta./pi,abs(p12_solo)),title('|\bf{p}\rm_{12}|'),xlabel('x\pi radians')
+subplot(2,1,2),polar(theta,abs(p12_solo))
+
+figure(2)
+subplot(2,1,1),plot(theta./pi,abs(p1_solo)),title('|\bf{p}\rm_1|'),xlabel('x\pi radians')
+subplot(2,1,2),polar(theta,abs(p1_solo))
+
+p_tot = p12_solo + p1_solo;
+
+figure(3)
+subplot(2,1,1),plot(theta./pi,abs(p_tot)),title('|\bf{p}|'),xlabel('x\pi radians')
+subplot(2,1,2),polar(theta,abs(p_tot))
+
+
+##### SOURCE END #####
+--></body></html>
